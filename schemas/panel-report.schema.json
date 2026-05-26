@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resume-agent.local/schemas/panel-report.schema.json",
+  "title": "Step 4 Eval Panel Report (single panelist)",
+  "description": "Step 4 单个子代理面试官报告。文件路径 evals/panel/YYYY-MM-DD-<name>-r{N}-interviewer-{a|b|c}.json",
+  "type": "object",
+  "required": [
+    "step", "case", "date", "round", "interviewer_id",
+    "baseline_review", "resume",
+    "scores", "total", "baseline_total", "delta_total",
+    "recommendation", "passed",
+    "top_gaps", "rewrite_priorities",
+    "pii_redacted", "provenance"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "step": { "const": "eval_panel" },
+    "case": { "type": "string", "minLength": 1 },
+    "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "round": { "type": "integer", "minimum": 1, "maximum": 99 },
+    "interviewer_id": { "enum": ["a", "b", "c"] },
+    "baseline_review": { "type": "string", "pattern": "^reviews/" },
+    "resume": { "type": "string", "pattern": "^resumes/output/" },
+    "scores": {
+      "type": "object",
+      "required": [
+        "hard_requirements", "core_skills", "project_relevance",
+        "seniority_fit", "presentation", "overall_recommendation"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "hard_requirements": { "type": "number", "minimum": 0, "maximum": 25 },
+        "core_skills": { "type": "number", "minimum": 0, "maximum": 35 },
+        "project_relevance": { "type": "number", "minimum": 0, "maximum": 35 },
+        "seniority_fit": { "type": "number", "minimum": 0, "maximum": 25 },
+        "presentation": { "type": "number", "minimum": 0, "maximum": 20 },
+        "overall_recommendation": { "type": "number", "minimum": 0, "maximum": 20 }
+      }
+    },
+    "total": { "type": "number", "minimum": 0, "maximum": 100 },
+    "baseline_total": { "type": "number", "minimum": 0, "maximum": 100 },
+    "delta_total": { "type": "number", "minimum": -100, "maximum": 100 },
+    "recommendation": { "enum": ["strong_yes", "yes", "maybe", "no"] },
+    "passed": { "type": "boolean" },
+    "top_gaps": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "maxItems": 10
+    },
+    "rewrite_priorities": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "maxItems": 10
+    },
+    "jd_checklist": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item", "result"],
+        "additionalProperties": false,
+        "properties": {
+          "item": { "type": "string" },
+          "result": { "enum": ["pass", "partial", "fail", "not_found"] },
+          "evidence": { "type": "string" }
+        }
+      }
+    },
+    "keyword_retention_rate": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 1,
+      "description": "由 scripts/diff-resume.mjs 计算的 JD 关键词保留率；Lens B 否决条件依据此值"
+    },
+    "pii_redacted": { "const": true },
+    "provenance": { "$ref": "common.provenance.json" }
+  }
+}

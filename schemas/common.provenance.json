@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resume-agent.local/schemas/common.provenance.json",
+  "title": "Provenance",
+  "description": "执行可复现性元数据。所有 Step 2 / 4 / 5 输出 JSON 必含。",
+  "type": "object",
+  "required": ["agent_model", "generated_at", "prompt_shas"],
+  "additionalProperties": false,
+  "properties": {
+    "agent_model": {
+      "type": "string",
+      "minLength": 1,
+      "description": "执行该评测/分析的 LLM 标识"
+    },
+    "temperature": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 2
+    },
+    "seed": {
+      "type": ["integer", "null"]
+    },
+    "prompt_shas": {
+      "type": "object",
+      "description": "所加载系统提示词文件的 sha1 前 12 位",
+      "required": ["base"],
+      "additionalProperties": false,
+      "properties": {
+        "base": { "type": "string", "minLength": 1 },
+        "runtime": { "type": ["string", "null"] },
+        "lens": { "type": ["string", "null"] },
+        "eval_mode": { "type": ["string", "null"] },
+        "gap_analyst": { "type": ["string", "null"] }
+      }
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO8601 时间戳"
+    }
+  }
+}

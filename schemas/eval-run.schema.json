@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resume-agent.local/schemas/eval-run.schema.json",
+  "title": "Step 4 Eval Panel Aggregate Run",
+  "description": "Step 4 主 Agent 汇总。文件路径 evals/runs/YYYY-MM-DD-<name>-r{N}.json",
+  "type": "object",
+  "required": [
+    "step", "case", "date", "round",
+    "plan", "baseline_review", "output_resume", "runtime_prompt",
+    "panelists", "panel_totals", "baseline_total",
+    "delta_vs_baseline_avg", "panel_passed",
+    "pass_rule", "threshold_per_panelist",
+    "merged_rewrite_priorities", "merged_top_gaps",
+    "next_action", "max_rounds",
+    "pii_redacted", "provenance"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "step": { "const": "eval_panel_aggregate" },
+    "case": { "type": "string", "minLength": 1 },
+    "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "round": { "type": "integer", "minimum": 1, "maximum": 99 },
+    "plan": { "type": "string", "pattern": "^plans/" },
+    "baseline_review": { "type": "string", "pattern": "^reviews/" },
+    "output_resume": { "type": "string", "pattern": "^resumes/output/" },
+    "runtime_prompt": { "type": "string", "pattern": "^prompts/runtime/" },
+    "panelists": {
+      "type": "object",
+      "required": ["a", "b", "c"],
+      "additionalProperties": false,
+      "properties": {
+        "a": { "$ref": "#/$defs/panelistRef" },
+        "b": { "$ref": "#/$defs/panelistRef" },
+        "c": { "$ref": "#/$defs/panelistRef" }
+      }
+    },
+    "panel_totals": {
+      "type": "object",
+      "required": ["a", "b", "c", "average", "min", "variance"],
+      "additionalProperties": false,
+      "properties": {
+        "a": { "type": "number", "minimum": 0, "maximum": 100 },
+        "b": { "type": "number", "minimum": 0, "maximum": 100 },
+        "c": { "type": "number", "minimum": 0, "maximum": 100 },
+        "average": { "type": "number", "minimum": 0, "maximum": 100 },
+        "min": { "type": "number", "minimum": 0, "maximum": 100 },
+        "variance": { "type": "number", "minimum": 0, "description": "三 panelist total 的样本方差" }
+      }
+    },
+    "baseline_total": { "type": "number", "minimum": 0, "maximum": 100 },
+    "delta_vs_baseline_avg": { "type": "number", "minimum": -100, "maximum": 100 },
+    "panel_passed": { "type": "boolean" },
+    "pass_rule": { "const": "all_three_must_pass" },
+    "threshold_per_panelist": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "merged_rewrite_priorities": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "merged_top_gaps": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "next_action": {
+      "enum": ["gap_analysis", "rewrite_loop", "user_escalation"]
+    },
+    "max_rounds": { "type": "integer", "minimum": 1, "maximum": 10 },
+    "flags": {
+      "type": "array",
+      "items": { "enum": ["high_variance", "regression_vs_baseline", "low_keyword_retention"] }
+    },
+    "pii_redacted": { "const": true },
+    "provenance": { "$ref": "common.provenance.json" }
+  },
+  "$defs": {
+    "panelistRef": {
+      "type": "object",
+      "required": ["report", "json", "total", "passed", "recommendation"],
+      "additionalProperties": false,
+      "properties": {
+        "report": { "type": "string", "pattern": "^evals/panel/" },
+        "json": { "type": "string", "pattern": "^evals/panel/" },
+        "total": { "type": "number", "minimum": 0, "maximum": 100 },
+        "passed": { "type": "boolean" },
+        "recommendation": { "enum": ["strong_yes", "yes", "maybe", "no"] },
+        "temperature": { "type": ["number", "null"], "minimum": 0, "maximum": 2 },
+        "seed": { "type": ["integer", "null"] }
+      }
+    }
+  }
+}

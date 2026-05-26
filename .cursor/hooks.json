@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      { "command": "node .cursor/hooks/before-shell-execution.mjs", "timeout": 10 }
+    ],
+    "afterFileEdit": [
+      { "command": "node .cursor/hooks/after-file-edit.mjs", "timeout": 30 }
+    ],
+    "stop": [
+      { "command": "node .cursor/hooks/stop.mjs", "timeout": 30 }
+    ]
+  }
+}

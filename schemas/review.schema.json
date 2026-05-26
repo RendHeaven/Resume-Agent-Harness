@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resume-agent.local/schemas/review.schema.json",
+  "title": "Step 2 Interview Baseline Review",
+  "description": "Step 2 面试官 baseline 评测的结构化输出。文件路径 reviews/YYYY-MM-DD-<name>.json",
+  "type": "object",
+  "required": [
+    "step", "case", "date",
+    "interviewer_prompt", "plan", "resume", "jd",
+    "scores", "total", "recommendation", "threshold", "passed",
+    "top_gaps", "rewrite_priorities",
+    "provenance"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "step": { "const": "interview_baseline" },
+    "case": { "type": "string", "minLength": 1 },
+    "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "interviewer_prompt": { "type": "string", "pattern": "^prompts/runtime/" },
+    "plan": { "type": "string", "pattern": "^plans/" },
+    "resume": { "type": "string", "pattern": "^resumes/input/" },
+    "jd": { "type": "string", "pattern": "^intake/" },
+    "scores": {
+      "type": "object",
+      "required": [
+        "hard_requirements", "core_skills", "project_relevance",
+        "seniority_fit", "presentation", "overall_recommendation"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "hard_requirements": { "type": "number", "minimum": 0, "maximum": 15 },
+        "core_skills": { "type": "number", "minimum": 0, "maximum": 25 },
+        "project_relevance": { "type": "number", "minimum": 0, "maximum": 25 },
+        "seniority_fit": { "type": "number", "minimum": 0, "maximum": 15 },
+        "presentation": { "type": "number", "minimum": 0, "maximum": 10 },
+        "overall_recommendation": { "type": "number", "minimum": 0, "maximum": 10 }
+      }
+    },
+    "total": { "type": "number", "minimum": 0, "maximum": 100 },
+    "recommendation": {
+      "type": "string",
+      "enum": ["strong_yes", "yes", "maybe", "no"]
+    },
+    "threshold": { "type": "number", "minimum": 0, "maximum": 100 },
+    "passed": { "type": "boolean" },
+    "top_gaps": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "maxItems": 10
+    },
+    "rewrite_priorities": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "maxItems": 10
+    },
+    "jd_checklist": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item", "result"],
+        "additionalProperties": false,
+        "properties": {
+          "item": { "type": "string" },
+          "result": { "enum": ["pass", "partial", "fail", "not_found"] },
+          "evidence": { "type": "string" }
+        }
+      }
+    },
+    "provenance": { "$ref": "common.provenance.json" }
+  }
+}

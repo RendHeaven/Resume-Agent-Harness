@@ -1,0 +1,37 @@
+---
+description: Harness 安全约束 — 危险命令与敏感信息
+alwaysApply: true
+---
+
+# Harness 安全规则
+
+## 危险命令
+
+执行以下命令前必须征得用户确认：
+
+- `git push --force` / `git push -f`
+- `rm -rf` / `Remove-Item -Recurse -Force`
+- `DROP DATABASE` / 任何数据库破坏性操作
+- 向外部 URL 上传简历或 PII 的命令
+
+## 敏感信息
+
+- 不得在 `evals/runs/` 中记录完整手机号、邮箱、身份证号
+- 不得在 commit message 中包含 PII
+- 分析报告中的 PII 可保留（供用户 Review），但 eval 记录必须脱敏
+
+## 仓库边界
+
+- `.cursor/hooks.json` 存在时，不得修改，除非用户明确要求优化 Harness
+- `evals/cases/` 存在时，不得删除其中的回归 fixture
+- 不得覆盖、删除或写入 `resumes/input/` 与 `intake/`（用户专属输入区，Agent 只读）
+- 不得修改 `prompts/system/`（Harness 系统提示词，只读）
+- 不得修改 `schemas/`（输出契约，只读；变更须经 ADR）
+- Harness 变更（rules / hooks / schemas / scripts）需在 `docs/adr/` 记录 ADR
+- Harness 变更前须运行 `node scripts/check-doc-refs.mjs` 退出 0
+
+## 失败处理
+
+- 校验脚本报错时，先修复 resume / 评测内容，再重试
+- 不得通过禁用 hooks、删脚本或跳过 eval 来「通过」验收
+- `validate-output.mjs` 报 schema 错时，按 `schemas/*.json` 修补字段，不得删 schema 字段

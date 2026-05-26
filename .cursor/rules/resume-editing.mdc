@@ -1,0 +1,43 @@
+---
+description: 简历改写规范 — 悬念模板结构与编辑约束
+globs:
+  - resumes/working/**
+  - resumes/output/**
+alwaysApply: false
+---
+
+# 简历改写规则
+
+## 模板
+
+Step 3 Rewrite **必须**遵循 [docs/templates/resume-suspense-template.md](../../docs/templates/resume-suspense-template.md)。
+
+完整流程见 [docs/rewrite-step-spec.md](../../docs/rewrite-step-spec.md)。
+
+## 章节结构（强制顺序）
+
+1. 头部（姓名 / 联系方式 / 求职意向 / 核心主张）
+2. 自我评价（Summary）— 3 条核心标签 + 战绩
+3. 专业技能（Technical Skills）— 与 Summary 标签对齐
+4. 工作经历（Work Experience）— 宏观职责，细节折叠
+5. 项目经历（Project Experience）— STAR + 留白悬念
+6. 教育经历（Education）
+
+## 环环相扣
+
+- Summary 论点必须有 Skills 论据、Projects 实证
+- Work 不得展开 STAR；Project 不得重复 Work 已写的职责清单
+- 改写前须完成 Summary ↔ Skills ↔ Work ↔ Project 映射
+
+## 悬念写法
+
+- Process 写 **机制名 + 架构决策**，折叠实现细节
+- 用专业术语作钩子，**禁止**输出「留下悬念」「诱导面试官」等 meta 文字
+- Output 必须量化或有 `[待补充: ...]`
+
+## 禁止
+
+- 捏造事实（见 `resume-core.mdc`）
+- 在 working/output 中保留 HTML 注释或模板占位引导
+- 未经用户确认写入 `resumes/output/`
+- 覆盖或删除 `resumes/input/`

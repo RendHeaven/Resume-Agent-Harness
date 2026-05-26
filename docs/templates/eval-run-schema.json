@@ -1,0 +1,72 @@
+{
+  "_note": "本文件已迁移到 schemas/eval-run.schema.json（正式 JSON Schema Draft 2020-12）。本处保留示例值供模板参考；实际校验以 schemas/ 为准。",
+  "_canonical_schema": "../../schemas/eval-run.schema.json",
+  "step": "eval_panel_aggregate",
+  "case": "<name>",
+  "date": "YYYY-MM-DD",
+  "round": 1,
+  "plan": "plans/YYYY-MM-DD-<name>.md",
+  "baseline_review": "reviews/YYYY-MM-DD-<name>.json",
+  "output_resume": "resumes/output/<name>.md",
+  "runtime_prompt": "prompts/runtime/YYYY-MM-DD-<name>.interviewer.system.md",
+  "panelists": {
+    "a": {
+      "report": "evals/panel/YYYY-MM-DD-<name>-r1-interviewer-a.md",
+      "json": "evals/panel/YYYY-MM-DD-<name>-r1-interviewer-a.json",
+      "total": 0,
+      "passed": false,
+      "recommendation": "no",
+      "temperature": 0.2,
+      "seed": null
+    },
+    "b": {
+      "report": "evals/panel/YYYY-MM-DD-<name>-r1-interviewer-b.md",
+      "json": "evals/panel/YYYY-MM-DD-<name>-r1-interviewer-b.json",
+      "total": 0,
+      "passed": false,
+      "recommendation": "no",
+      "temperature": 0.5,
+      "seed": null
+    },
+    "c": {
+      "report": "evals/panel/YYYY-MM-DD-<name>-r1-interviewer-c.md",
+      "json": "evals/panel/YYYY-MM-DD-<name>-r1-interviewer-c.json",
+      "total": 0,
+      "passed": false,
+      "recommendation": "no",
+      "temperature": 0.8,
+      "seed": null
+    }
+  },
+  "panel_totals": {
+    "a": 0,
+    "b": 0,
+    "c": 0,
+    "average": 0,
+    "min": 0,
+    "variance": 0
+  },
+  "baseline_total": 0,
+  "delta_vs_baseline_avg": 0,
+  "panel_passed": false,
+  "pass_rule": "all_three_must_pass",
+  "threshold_per_panelist": 70,
+  "merged_rewrite_priorities": [],
+  "merged_top_gaps": [],
+  "next_action": "rewrite_loop",
+  "max_rounds": 3,
+  "flags": [],
+  "pii_redacted": true,
+  "provenance": {
+    "agent_model": "<e.g. claude-4.6-sonnet>",
+    "temperature": null,
+    "seed": null,
+    "prompt_shas": {
+      "base": "<sha1[:12] of interviewer-base.system.md>",
+      "runtime": "<sha1[:12] of runtime prompt>",
+      "lens": null,
+      "eval_mode": "<sha1[:12] of interviewer-eval-mode.system.md>"
+    },
+    "generated_at": "YYYY-MM-DDTHH:MM:SSZ"
+  }
+}

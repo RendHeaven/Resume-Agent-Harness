@@ -1,0 +1,16 @@
+{
+  "fixture_id": "fixture-fresh-grad",
+  "description": "应届生投递 8 年+/带团队/千万 DAU 资深岗；JD 硬性年限/规模/带人均不达标。预期：Plan 可生成（方向技术栈一致），但 Step 4 三面试官应全部 fail（硬性条目 fail），自动循环 3 轮仍不通过，最终 next_action=user_escalation",
+  "expected_blocking_questions": false,
+  "expected_artifacts": {
+    "plans/*.md": { "exists": true },
+    "reviews/*.json": { "exists": true, "min_total": 0, "max_total": 50 },
+    "resumes/output/*.md": { "exists": true },
+    "evals/runs/*-r1.json": { "exists": true, "panel_passed": false },
+    "evals/runs/*-r2.json": { "exists": true, "panel_passed": false },
+    "evals/runs/*-r3.json": { "exists": true, "panel_passed": false },
+    "gaps/*.json": { "exists": false, "reason": "Step 4 未通过，禁止进入 Step 5" }
+  },
+  "expected_lens_b_keyword_floor": 0.5,
+  "expected_max_rounds_action": "user_escalation"
+}

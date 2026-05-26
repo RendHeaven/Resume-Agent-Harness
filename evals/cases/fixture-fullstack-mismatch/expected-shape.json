@@ -1,0 +1,16 @@
+{
+  "fixture_id": "fixture-fullstack-mismatch",
+  "description": "direction 为财务岗、resume/requirements 为全栈高级岗，方向严重不符；预期 Step 1 阶段 Agent 反问并暂停，不应落盘 plan",
+  "expected_blocking_questions": true,
+  "expected_artifacts": {
+    "plans/*.md": { "exists": false, "reason": "阻塞级方向问题应暂停 Plan 落盘" },
+    "reviews/*.json": { "exists": false },
+    "resumes/output/*.md": { "exists": false },
+    "evals/runs/*.json": { "exists": false },
+    "gaps/*.json": { "exists": false }
+  },
+  "expected_chat_signals": [
+    "direction 与 JD 岗位类型冲突",
+    "请用户更新 direction.md"
+  ]
+}

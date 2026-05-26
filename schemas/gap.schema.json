@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resume-agent.local/schemas/gap.schema.json",
+  "title": "Step 5 Gap Analysis",
+  "description": "Step 5 JD 与定稿简历差距对照。文件路径 gaps/YYYY-MM-DD-<name>.json",
+  "type": "object",
+  "required": [
+    "step", "case", "date",
+    "eval_run", "output_resume", "jd",
+    "fit_estimate", "skill_gaps", "improvements",
+    "jd_matrix_summary", "pii_redacted", "provenance"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "step": { "const": "gap_analysis" },
+    "case": { "type": "string", "minLength": 1 },
+    "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "eval_run": { "type": "string", "pattern": "^evals/runs/" },
+    "output_resume": { "type": "string", "pattern": "^resumes/output/" },
+    "jd": { "type": "string", "pattern": "^intake/" },
+    "fit_estimate": {
+      "type": "object",
+      "required": ["low", "high", "rationale"],
+      "additionalProperties": false,
+      "properties": {
+        "low": { "type": "number", "minimum": 0, "maximum": 100 },
+        "high": { "type": "number", "minimum": 0, "maximum": 100 },
+        "rationale": { "type": "string", "minLength": 1 }
+      }
+    },
+    "skill_gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["category", "description", "type"],
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "enum": ["hard_skill", "domain_knowledge", "seniority", "soft_skill"]
+          },
+          "description": { "type": "string", "minLength": 1 },
+          "type": {
+            "enum": ["capability_missing", "evidence_insufficient", "expression_suspended"]
+          },
+          "jd_source": { "type": "string" }
+        }
+      }
+    },
+    "improvements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["what", "why", "how", "priority"],
+        "additionalProperties": false,
+        "properties": {
+          "what": { "type": "string", "minLength": 1 },
+          "why": { "type": "string", "minLength": 1 },
+          "how": { "type": "string", "minLength": 1 },
+          "priority": { "enum": ["P0", "P1", "P2"] },
+          "expected_impact": { "type": "string" }
+        }
+      }
+    },
+    "jd_matrix_summary": {
+      "type": "object",
+      "required": ["high", "medium", "low", "none"],
+      "additionalProperties": false,
+      "properties": {
+        "high": { "type": "integer", "minimum": 0 },
+        "medium": { "type": "integer", "minimum": 0 },
+        "low": { "type": "integer", "minimum": 0 },
+        "none": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "pii_redacted": { "const": true },
+    "provenance": { "$ref": "common.provenance.json" }
+  }
+}
