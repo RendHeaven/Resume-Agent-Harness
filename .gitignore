@@ -1,0 +1,101 @@
+# ════════════════════════════════════════════════════════════════
+#  Resume-Agent-Harness — .gitignore
+#
+#  原则：保留 Harness 框架代码（可公开复用）；
+#        忽略所有含用户 PII 的运行产物。
+#
+#  保留（无 PII，可公开）：
+#    .cursor/rules/ .cursor/skills/ .cursor/hooks/
+#    docs/  schemas/  scripts/  prompts/system/
+#    evals/cases/  evals/dashboard.md  evals/README.md
+#    intake/sample/  intake/README.md
+#
+#  忽略（含 PII）：
+#    input/  intake/<用户案例>/  resumes/（三目录）
+#    plans/  reviews/  evals/panel/  evals/runs/
+#    gaps/   prompts/runtime/
+# ════════════════════════════════════════════════════════════════
+
+
+# ─── 操作系统 & 编辑器临时文件 ──────────────────────────────────
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+.idea/
+*.iml
+.vscode/settings.json
+.vscode/launch.json
+
+# .cursor/ 目录本身不忽略（Harness Rules/Skills/Hooks 是框架核心）
+
+
+# ─── Node.js ───────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm/
+.pnp
+.pnp.js
+.env
+.env.*
+!.env.example
+
+
+# ════════════════════════════════════════════════════════════════
+#  用户 PII 数据（个人信息 / 简历 / 案例运行产物）
+# ════════════════════════════════════════════════════════════════
+
+# ─── 原始上传文件 ────────────────────────────────────────────────
+# 用户手动放置的原始简历和 JD 文件，通常含真实姓名、手机、邮箱
+input/
+
+
+# ─── 用户专属 intake ─────────────────────────────────────────────
+# 含用户求职方向、JD、项目详情等敏感业务信息
+# 仅保留 sample/（匿名 fixture）和 README.md
+intake/*
+!intake/sample
+!intake/sample/**
+!intake/README.md
+
+
+# ─── 用户简历文件 ────────────────────────────────────────────────
+# 三个目录均含手机号、邮箱、真实姓名
+resumes/input/
+resumes/working/
+resumes/output/
+
+
+# ─── Step 1: 优化计划 ────────────────────────────────────────────
+# 含用户 JD 对照、项目细节、求职意向分析
+plans/
+
+
+# ─── Step 2: 面试官评测报告 ──────────────────────────────────────
+# 含候选人简历内容摘录与评分
+reviews/
+
+
+# ─── Step 4: 三面试官面板报告与汇总 ─────────────────────────────
+evals/panel/
+evals/runs/
+
+
+# ─── Step 5: JD 差距分析 ─────────────────────────────────────────
+# 含用户个人成长建议，涉及真实能力评估
+# 保留 README.md（目录说明，无 PII）
+gaps/*
+!gaps/README.md
+
+
+# ─── Agent 运行时实例化提示词 ─────────────────────────────────────
+# 由 Step 2 根据用户 JD 生成，含案例绑定信息
+# 保留 prompts/system/（Harness 只读系统提示词，无 PII）
+prompts/runtime/

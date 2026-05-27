@@ -35,9 +35,17 @@ Step 3 Rewrite **必须**遵循 [docs/templates/resume-suspense-template.md](../
 - 用专业术语作钩子，**禁止**输出「留下悬念」「诱导面试官」等 meta 文字
 - Output 必须量化或有 `[待补充: ...]`
 
+## 篇幅控制（强制）
+
+- `resumes/working/**` 与 `resumes/output/**` **总行数 ≤ 80 行**（含空行；由 `scripts/score-resume.mjs` 自动校验）
+- **禁止水字数**：不得用通用形容词堆砌、同义复述、罗列无关工具、过度 markdown 装饰等方式凑长度
+- 信息密度优先：**删 > 补**，环环相扣无证据时降级或删除，**不得**硬写
+- 详见 [docs/rewrite-step-spec.md#篇幅控制强制](../../docs/rewrite-step-spec.md)
+
 ## 禁止
 
 - 捏造事实（见 `resume-core.mdc`）
 - 在 working/output 中保留 HTML 注释或模板占位引导
 - 未经用户确认写入 `resumes/output/`
 - 覆盖或删除 `resumes/input/`
+- 简历总行数 > 80 行

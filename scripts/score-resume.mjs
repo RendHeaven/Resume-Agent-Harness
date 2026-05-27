@@ -3,6 +3,7 @@
 // 检查项：
 //   - 5 章节顺序：自我评价/Summary → 专业技能/Skills → 工作经历/Work → 项目经历/Project → 教育经历/Education
 //   - 自我评价至少 3 条 bullet
+//   - 总行数 ≤ MAX_LINES（含空行）—— 强制篇幅控制，禁止水字数
 //   - 无 HTML 注释 <!-- ... -->
 //   - 无 meta 引导语（"留下悬念"、"诱导面试官"等）
 //   - 无未替换占位符 {{...}}
@@ -13,6 +14,8 @@
 
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
+
+const MAX_LINES = 80;
 
 const SECTIONS = [
   { id: "summary", patterns: [/自我评价/, /\bSummary\b/i] },
@@ -44,6 +47,14 @@ function check(path) {
   if (!existsSync(path)) return { errors: [`file not found: ${path}`], warnings };
   const text = readFileSync(resolve(path), "utf8");
   const lines = text.split(/\r?\n/);
+
+  // 强制行数上限（含空行）。超出视为水字数 / 信息密度不足，须裁剪
+  const lineCount = lines[lines.length - 1] === "" ? lines.length - 1 : lines.length;
+  if (lineCount > MAX_LINES) {
+    errors.push(`line count ${lineCount} exceeds MAX_LINES=${MAX_LINES} (禁止水字数：裁剪冗余形容词、同义复述、无关工具罗列)`);
+  } else if (lineCount > MAX_LINES * 0.9) {
+    warnings.push(`line count ${lineCount} approaching limit (${MAX_LINES}); 考虑裁剪`);
+  }
 
   // section order
   const positions = SECTIONS.map((s) => ({ id: s.id, idx: findSectionLine(lines, s.patterns) }));

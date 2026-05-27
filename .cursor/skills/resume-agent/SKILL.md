@@ -152,6 +152,8 @@ description: >-
 **改写约束**：
 
 - 遵循 `.cursor/rules/resume-editing.mdc`
+- **总行数 ≤ 80 行**（由 `scripts/score-resume.mjs` 校验，超出 FAIL）
+- **禁止水字数**：不得通用形容词堆砌 / 同义复述 / 罗列无关工具 / 过度 markdown 装饰
 - **环环相扣**：Summary 每条须有 Skills 论据 + Project 实证（或无依据则降级）
 - **悬念在内容层**：Process 留术语钩子，**禁止**输出「留下悬念」等 meta 文字
 - 不得捏造事实；缺失量化用 `[待补充: ...]`
@@ -160,7 +162,7 @@ description: >-
 **DoD**：
 
 - 映射表已完成，自检通过
-- `resumes/working/<name>.md` 存在且符合五章节结构
+- `resumes/working/<name>.md` 存在且符合五章节结构，**总行数 ≤ 80**
 - 用户确认后 `resumes/output/<name>.md` 存在
 
 ### Step 4: Eval（三面试官面板）
